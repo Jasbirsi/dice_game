@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components';
 
-function Score() {
+function Score({totalScore}) {
   return (
     <ScoreContainer>
       <div>
-        <CurrentScore>0</CurrentScore>
+        <CurrentScore>{totalScore}</CurrentScore>
         <span>Total Score</span>
       </div>
     </ScoreContainer>

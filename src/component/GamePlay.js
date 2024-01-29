@@ -4,16 +4,45 @@ import NumberSelector from './NumberSelector';
 import styled from 'styled-components';
 import RollDice from './RollDice';
 import { useState } from 'react';
+import ShowRules from './ShowRules';
 function GamePlay() {
+    const [showRules , setShowRules] = useState(false);
+    const [totalScore , setTotalScore] = useState(0);
     const [numberSelected , setNumberSelected] = useState();
-    const [currentDice , setCurrentDice] = useState();    
+    const [currentDice , setCurrentDice] = useState(1); 
+    const [error , setError] =useState();
+    const generateRandomNumber = (min , max) =>{
+        return Math.floor(Math.random() * (max - min) + min) ;
+        
+      }
+    
+      const roleDice = () => {
+        if(!numberSelected){
+            setError("You have not Selected any Number");
+             return;
+        }
+        setError("");
+        const randomNumber=generateRandomNumber(1,7);
+        setCurrentDice((prev) => randomNumber);
+
+        
+        if (numberSelected === randomNumber){
+            setTotalScore((prev) => prev+randomNumber)
+        }
+        else{
+            setTotalScore((prev) => prev -2);
+        }
+        setNumberSelected(undefined);
+      }
+        
     return (
         <MainContainer>
-            <div className='top_section'>
-                <Score></Score>
-                <NumberSelector numberSelected={numberSelected} setNumberSelected={setNumberSelected}></NumberSelector>
+            <div className='top_section'> 
+                <Score totalScore={totalScore}></Score>
+                <NumberSelector setError={setError} error={error} numberSelected={numberSelected} setNumberSelected={setNumberSelected}></NumberSelector>
             </div>
-            <RollDice currentDice={currentDice} setCurrentDice={setCurrentDice}></RollDice>
+            <RollDice  setShowRules={setShowRules} setTotalScore={setTotalScore} currentDice={currentDice} roleDice={roleDice}></RollDice>
+            {showRules && <ShowRules></ShowRules>}
         </MainContainer>
     )
 }
